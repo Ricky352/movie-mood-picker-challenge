@@ -1,4 +1,4 @@
-import type { MoodConfig } from "../types/mood"
+import type { MoodConfig } from "../types/mood";
 
 // TMDB genre ids:
 // 28=Action  35=Comedy  18=Drama  10749=Romance  27=Horror
@@ -61,6 +61,7 @@ export const MOODS: MoodConfig[] = [
     genreIds: [35, 16, 10751],
     tmdbParams: { sort_by: "popularity.desc", "vote_average.gte": 6 },
   },
-]
+];
 
-export const getMoodConfig = (mood: string): MoodConfig | undefined => MOODS.find((m) => m.mood === mood)
+export const getMoodConfig = (mood: string): MoodConfig | undefined =>
+  MOODS.find((m) => m.mood === mood);

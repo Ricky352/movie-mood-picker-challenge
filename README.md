@@ -67,7 +67,7 @@ The `Movie` type is what you work with in components — already normalized and 
 ### Hook — `src/hooks/useMovies.ts`
 
 ```ts
-const { movies, loading, error, loadMovies, reset } = useMovies()
+const { movies, loading, error, loadMovies, reset } = useMovies();
 ```
 
 |                    | Type                            | Description                                   |

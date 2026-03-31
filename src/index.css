@@ -1,14 +1,46 @@
 @import "tailwindcss";
 
+@theme {
+  --color-lilac-ash-50: #f1f0f4;
+  --color-lilac-ash-100: #e3e1ea;
+  --color-lilac-ash-200: #c8c3d5;
+  --color-lilac-ash-300: #aca5c0;
+  --color-lilac-ash-400: #9088aa;
+  --color-lilac-ash-500: #756a95;
+  --color-lilac-ash-600: #5d5577;
+  --color-lilac-ash-700: #463f5a;
+  --color-lilac-ash-800: #2f2a3c;
+  --color-lilac-ash-900: #17151e;
+  --color-lilac-ash-950: #100f15;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(circle at top, rgba(47, 42, 60, 0.7) 0%, transparent 45%),
+    linear-gradient(180deg, #17151e 0%, #100f15 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  color: #f1f0f4;
 }
