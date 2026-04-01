@@ -138,19 +138,13 @@ const HomePage = () => {
 const App = () => {
   const [favorites] = useState<number[]>([])
 
-  // TODO: implement search & favorites
-  const handleSearch = (query: string) => {
-    console.log("Search:", query)
-  }
-
   const handleFavoritesClick = () => {
     console.log("Favorites:", favorites)
   }
 
   return (
-      <div className="min-h-screen max-w-6xl mx-auto px-4">
+    <div className="min-h-screen max-w-6xl mx-auto px-4">
       <Header
-        onSearch={handleSearch}
         onFavoritesClick={handleFavoritesClick}
         favoritesCount={favorites.length}
       />
