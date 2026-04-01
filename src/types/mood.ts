@@ -8,6 +8,14 @@ export type Mood =
   | "adventurous"
   | "lazy";
 
+export interface MoodTheme {
+  card: string;
+  emoji: string;
+  label: string;
+  desc: string;
+  glow: string;
+}
+
 export interface MoodConfig {
   mood: Mood;
   label: string;
@@ -18,4 +26,6 @@ export interface MoodConfig {
   genreIds: number[];
   // Optional extra TMDB params (e.g. sort_by, vote_average.gte)
   tmdbParams?: Record<string, string | number>;
+  // UI theme: Tailwind classes for the mood card
+  theme: MoodTheme;
 }
