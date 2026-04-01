@@ -14,6 +14,7 @@ export interface MoodTheme {
   label: string;
   desc: string;
   glow: string;
+  accent: string;
 }
 
 export interface MoodConfig {

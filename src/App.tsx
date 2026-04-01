@@ -45,6 +45,19 @@ const MoodPage = () => {
     }
   }, [loadMovies, mood])
 
+  useEffect(() => {
+    const config = getMoodConfig(mood as Mood)
+    if (!config) return
+    const { accent } = config.theme
+    const r = parseInt(accent.slice(1, 3), 16)
+    const g = parseInt(accent.slice(3, 5), 16)
+    const b = parseInt(accent.slice(5, 7), 16)
+    document.body.style.setProperty("--mood-accent", `rgba(${r}, ${g}, ${b}, 0.25)`)
+    return () => {
+      document.body.style.setProperty("--mood-accent", "rgba(47, 42, 60, 0.7)")
+    }
+  }, [mood])
+
   // TODO: remove logs
   useEffect(() => {
     if (loading) console.debug("[MoodPage] loading movies for mood:", mood)
@@ -135,7 +148,7 @@ const App = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
+      <div className="min-h-screen max-w-6xl mx-auto px-4">
       <Header
         onSearch={handleSearch}
         onFavoritesClick={handleFavoritesClick}
