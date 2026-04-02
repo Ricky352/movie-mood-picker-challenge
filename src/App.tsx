@@ -26,6 +26,17 @@ import type { Mood } from "./types/mood"
  */
 
 const VALID_MOODS = new Set(MOODS.map((m) => m.mood))
+const DEFAULT_ACCENT = "rgba(47, 42, 60, 0.7)"
+
+function hexToRgba(hex: string, alpha = 1) {
+  if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return null
+
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
 
 const MoodPage = () => {
   const navigate = useNavigate()
@@ -45,32 +56,36 @@ const MoodPage = () => {
     }
   }, [loadMovies, mood])
 
+
+  // Handle background gradient
   useEffect(() => {
     const config = getMoodConfig(mood as Mood)
     if (!config) return
-    const { accent } = config.theme
-    const r = parseInt(accent.slice(1, 3), 16)
-    const g = parseInt(accent.slice(3, 5), 16)
-    const b = parseInt(accent.slice(5, 7), 16)
-    document.body.style.setProperty("--mood-accent", `rgba(${r}, ${g}, ${b}, 0.25)`)
+
+    const color = hexToRgba(config.theme.color1, 0.25)
+    if (!color) return
+
+    document.body.style.setProperty("--mood-accent", color)
+    // cleanup
     return () => {
-      document.body.style.setProperty("--mood-accent", "rgba(47, 42, 60, 0.7)")
+      document.body.style.setProperty("--mood-accent", DEFAULT_ACCENT)
     }
   }, [mood])
 
-  // TODO: remove logs
-  useEffect(() => {
-    if (loading) console.debug("[MoodPage] loading movies for mood:", mood)
-  }, [loading, mood])
 
-  useEffect(() => {
-    if (error) console.error("[MoodPage] error fetching movies:", error)
-  }, [error])
-
+  // TODO: Change styling later
   if (!mood || !VALID_MOODS.has(mood as Mood)) {
     return (
-      <main className="py-8">
-        <p className="text-lilac-ash-300">Unknown mood. <button onClick={() => navigate("/")} className="underline">Go back</button></p>
+      <main className="flex-1 flex flex-col items-center justify-center gap-4 text-center">
+        <span className="text-5xl">🤔</span>
+        <h2 className="text-2xl font-bold text-lilac-ash-50">Unknown mood</h2>
+        <p className="text-lilac-ash-400 text-sm">We don't recognise <span className="text-lilac-ash-200 font-medium">"{mood}"</span> as a mood.</p>
+        <button
+          onClick={() => navigate("/")}
+          className="mt-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-lilac-ash-700 hover:bg-lilac-ash-600 text-lilac-ash-50 transition-colors cursor-pointer"
+        >
+          ← Back to moods
+        </button>
       </main>
     )
   }
@@ -80,7 +95,7 @@ const MoodPage = () => {
   const handleRetry = () => loadMovies(mood as Mood)
 
   return (
-    <main className="py-8">
+    <main className="flex-1 py-8">
       <button
         onClick={() => navigate("/")}
         className="mb-6 text-lilac-ash-400 hover:text-lilac-ash-200 transition-colors"
@@ -128,7 +143,7 @@ const HomePage = () => {
   }
 
   return (
-    <main className="py-8">
+    <main className="flex-1 h-full">
       <p className="text-lilac-ash-300 mb-6">How are you feeling today?</p>
       <MoodSelector onSelect={handleMoodSelect} />
     </main>
@@ -136,18 +151,9 @@ const HomePage = () => {
 }
 
 const App = () => {
-  const [favorites] = useState<number[]>([])
-
-  const handleFavoritesClick = () => {
-    console.log("Favorites:", favorites)
-  }
-
   return (
-    <div className="min-h-screen max-w-6xl mx-auto px-4">
-      <Header
-        onFavoritesClick={handleFavoritesClick}
-        favoritesCount={favorites.length}
-      />
+    <div className="flex flex-col min-h-screen max-w-6xl mx-auto px-4">
+      <Header />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
