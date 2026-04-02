@@ -1,10 +1,5 @@
 
-interface HeaderProps {
-  onFavoritesClick: () => void
-  favoritesCount: number
-}
-
-export const Header = ({ onFavoritesClick, favoritesCount }: HeaderProps) => {
+export const Header = () => {
   return (
     <header className="flex items-center justify-between py-6">
       <div className="flex items-center gap-3">
