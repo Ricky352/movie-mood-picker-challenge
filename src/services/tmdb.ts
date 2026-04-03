@@ -42,7 +42,6 @@ const normalizeMovie = (raw: TMDBMovieDetails): Movie => ({
 const tmdbFetch = async <T>(
   endpoint: string,
   params: Record<string, string | number> = {},
-  signal?: AbortSignal,
 ): Promise<T> => {
   const url = new URL(`${BASE_URL}${endpoint}`);
   url.searchParams.set("api_key", getApiKey());
@@ -51,7 +50,7 @@ const tmdbFetch = async <T>(
     url.searchParams.set(k, String(v)),
   );
 
-  const res = await fetch(url.toString(), { signal });
+  const res = await fetch(url.toString());
   if (!res.ok) throw new Error(`TMDB error ${res.status}: ${res.statusText}`);
   return res.json() as Promise<T>;
 };
@@ -60,39 +59,25 @@ const tmdbFetch = async <T>(
  * Returns raw TMDB movies matching the given genre ids.
  * Picks a random page (1-5) for variety on each call.
  */
-export const fetchMoviesByMood = async (
-  params: {
-    genreIds: number[];
-    tmdbParams?: Record<string, string | number>;
-  },
-  signal?: AbortSignal,
-): Promise<TMDBMovie[]> => {
+export const fetchMoviesByMood = async (params: {
+  genreIds: number[];
+  tmdbParams?: Record<string, string | number>;
+}): Promise<TMDBMovie[]> => {
   const randomPage = Math.floor(Math.random() * 5) + 1;
-  const data = await tmdbFetch<TMDBDiscoverResponse>(
-    "/discover/movie",
-    {
-      with_genres: params.genreIds.join(","),
-      sort_by: "popularity.desc",
-      page: randomPage,
-      ...params.tmdbParams,
-    },
-    signal,
-  );
+  const data = await tmdbFetch<TMDBDiscoverResponse>("/discover/movie", {
+    with_genres: params.genreIds.join(","),
+    sort_by: "popularity.desc",
+    page: randomPage,
+    ...params.tmdbParams,
+  });
   return data.results;
 };
 
 /**
  * Returns a fully normalized Movie for a given TMDB movie id.
  */
-export const fetchMovieDetails = async (
-  movieId: number,
-  signal?: AbortSignal,
-): Promise<Movie> => {
-  const raw = await tmdbFetch<TMDBMovieDetails>(
-    `/movie/${movieId}`,
-    {},
-    signal,
-  );
+export const fetchMovieDetails = async (movieId: number): Promise<Movie> => {
+  const raw = await tmdbFetch<TMDBMovieDetails>(`/movie/${movieId}`);
   return normalizeMovie(raw);
 };
 

@@ -9,13 +9,10 @@ interface UseMoviesState {
 }
 
 interface UseMoviesReturn extends UseMoviesState {
-  loadMovies: (
-    params: {
-      genreIds: number[];
-      tmdbParams?: Record<string, string | number>;
-    },
-    signal?: AbortSignal,
-  ) => Promise<void>;
+  loadMovies: (params: {
+    genreIds: number[];
+    tmdbParams?: Record<string, string | number>;
+  }) => Promise<void>;
   reset: () => void;
 }
 
@@ -37,19 +34,16 @@ export const useMovies = (): UseMoviesReturn => {
   const [state, setState] = useState<UseMoviesState>(INITIAL_STATE);
 
   const loadMovies = useCallback(
-    async (
-      params: {
-        genreIds: number[];
-        tmdbParams?: Record<string, string | number>;
-      },
-      signal?: AbortSignal,
-    ) => {
+    async (params: {
+      genreIds: number[];
+      tmdbParams?: Record<string, string | number>;
+    }) => {
       setState({ movies: [], loading: true, error: null });
 
       try {
-        const rawMovies = await fetchMoviesByMood(params, signal);
+        const rawMovies = await fetchMoviesByMood(params);
         const detailed = await Promise.all(
-          rawMovies.slice(0, 6).map((m) => fetchMovieDetails(m.id, signal)),
+          rawMovies.slice(0, 6).map((m) => fetchMovieDetails(m.id)),
         );
         setState({ movies: detailed, loading: false, error: null });
       } catch (err) {
