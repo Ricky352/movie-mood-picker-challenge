@@ -50,9 +50,12 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
     setSelected((prev) => (prev === id ? null : id));
   };
 
-  const handleRandom = () => {
-    setSelected(null);
-    handleRandomPick(allMoods.map((m) => m.id), (id) => setSelected(id));
+  const handleSunClick = () => {
+    if (selected) {
+      onSelect(selected);
+    } else {
+      handleRandomPick(allMoods.map((m) => m.id), (id) => setSelected(id));
+    }
   };
 
   return (
@@ -67,7 +70,7 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[72%] aspect-square rounded-full border border-dashed border-white/4 pointer-events-none" />
 
         <SunCenter
-          onRandomPick={handleRandom}
+          onRandomPick={handleSunClick}
           activeMoodConfig={activeMoodConfig}
           sunHovered={sunHovered}
           onSunHover={setSunHovered}
@@ -98,29 +101,7 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
         ))}
       </div>
 
-      <div className="flex flex-col items-center gap-3 mt-4">
-        <div
-          style={{ visibility: activeMoodConfig ? "visible" : "hidden" }}
-        >
-          <button
-            onClick={() => onSelect(selected!)}
-            aria-label={activeMoodConfig ? `Show me ${activeMoodConfig.label.toLowerCase()} movies` : undefined}
-            className="px-9 py-3.5 rounded-[14px] border-0 text-black text-md font-bold cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03]"
-            style={{
-              background: activeMoodConfig
-                ? `linear-gradient(135deg, ${activeMoodConfig.theme.color1}, rgba(255, 255, 255, 0.14))`
-                : "transparent",
-              boxShadow: activeMoodConfig
-                ? `0 8px 30px ${activeMoodConfig.theme.color1}44`
-                : "none",
-            }}
-          >
-            {activeMoodConfig
-              ? `Show me ${activeMoodConfig.label.toLowerCase()} movies →`
-              : "placeholder"}
-          </button>
-        </div>
-
+      <div className="flex flex-col items-center mt-4">
         <button
           onClick={() => setShowCreate(true)}
           className="text-xs text-white/35 hover:text-white/65 transition-colors duration-200 cursor-pointer underline underline-offset-2 decoration-white/20"
