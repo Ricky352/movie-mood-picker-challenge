@@ -29,8 +29,8 @@ const MoodPage = () => {
   const { movies, loading, error, loadMovies } = useMovies();
   const { customMoods } = useCustomMoods();
 
-  const [debugLoading, setDebugLoading] = useState(false);
-  const [debugError, setDebugError] = useState<string | null>(null);
+  const [debugLoading] = useState(false);
+  const [debugError] = useState<string | null>(null);
 
   const isLoading = loading || debugLoading;
   const activeError = error ?? debugError;
