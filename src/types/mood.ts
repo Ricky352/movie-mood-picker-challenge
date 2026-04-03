@@ -14,7 +14,9 @@ export interface MoodTheme {
   label: string;
   desc: string;
   glow: string;
-  accent: string;
+  // Primary and secondary gradient colors
+  color1: string;
+  color2: string;
 }
 
 export interface MoodConfig {

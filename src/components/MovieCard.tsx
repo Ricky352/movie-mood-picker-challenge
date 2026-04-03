@@ -1,7 +1,7 @@
-import type { Movie } from "../types/movie"
+import type { Movie } from "../types/movie";
 
 interface MovieCardProps {
-  movie: Movie
+  movie: Movie;
 }
 
 export const MovieCard = ({ movie }: MovieCardProps) => {
@@ -19,14 +19,18 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
         </div>
       )}
       <div className="p-4">
-        <h3 className="font-semibold text-lg text-lilac-ash-50">{movie.title}</h3>
+        <h3 className="font-semibold text-lg text-lilac-ash-50">
+          {movie.title}
+        </h3>
         <div className="flex items-center gap-2 text-sm text-lilac-ash-400 mt-1">
           <span>{movie.releaseYear}</span>
           <span>•</span>
           <span>★ {movie.rating}</span>
         </div>
-        <p className="text-sm text-lilac-ash-300 mt-2 line-clamp-3">{movie.overview}</p>
+        <p className="text-sm text-lilac-ash-300 mt-2 line-clamp-3">
+          {movie.overview}
+        </p>
       </div>
     </div>
-  )
-}
+  );
+};

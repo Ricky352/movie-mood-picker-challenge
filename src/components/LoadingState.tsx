@@ -6,5 +6,5 @@ export const LoadingState = () => {
         <p className="mt-4 text-lilac-ash-400">Loading movies...</p>
       </div>
     </div>
-  )
-}
+  );
+};

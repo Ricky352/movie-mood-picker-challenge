@@ -1,44 +1,95 @@
-import { MOODS } from "../constants/moods"
-import type { Mood } from "../types/mood"
+import { useState } from "react";
+import { MOODS } from "../constants/moods";
+import type { Mood } from "../types/mood";
+import { SunCenter } from "./SunCenter";
+import { MoodBubble } from "./MoodBubble";
+import { useContainerSize } from "../hooks/useContainerSize";
+import { useOrbitAnimation } from "../hooks/useOrbitAnimation";
+import { useMoodAccent } from "../hooks/useMoodAccent";
+import { useRandomMoodSpin } from "../hooks/useRandomMoodSpin";
 
 interface MoodSelectorProps {
-  onSelect: (mood: Mood) => void
+  onSelect: (mood: Mood) => void;
 }
 
 export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
+  const [selected, setSelected] = useState<Mood | null>(null);
+  const [hovered, setHovered] = useState<Mood | null>(null);
+  const [sunHovered, setSunHovered] = useState(false);
+
+  const { containerRef, containerSize } = useContainerSize(480);
+  const orbitAngle = useOrbitAnimation();
+  const { spinning, randomHighlight, handleRandomPick } = useRandomMoodSpin();
+
+  useMoodAccent(selected, randomHighlight);
+
+  const handleSelect = (mood: Mood) => {
+    if (spinning) return;
+    setSelected((prev) => (prev === mood ? null : mood));
+  };
+
+  const handleRandom = () => {
+    setSelected(null);
+    handleRandomPick((mood) => setSelected(mood));
+  };
+
+  const activeMood = MOODS.find((m) => m.mood === selected);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {MOODS.map((config) => {
-        const { theme } = config
-        return (
-          <button
+    <div className="flex-1 flex flex-col justify-center content-center ">
+      <div
+        ref={containerRef}
+        className="relative w-full max-w-135 sm:max-w-160 lg:max-w-200 aspect-square mx-auto"
+      >
+        {/* Orbit ring */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[72%] aspect-square rounded-full border border-dashed border-white/4 pointer-events-none" />
+
+        <SunCenter
+          onRandomPick={handleRandom}
+          hoveredMood={hovered}
+          selectedMood={selected}
+          sunHovered={sunHovered}
+          onSunHover={setSunHovered}
+          containerSize={containerSize}
+        />
+
+        {MOODS.map((config, i) => (
+          <MoodBubble
             key={config.mood}
-            onClick={() => onSelect(config.mood)}
-            className={`group cursor-pointer relative overflow-hidden p-6 text-left border rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${theme.card}`}
-          >
-            {/* Glow */}
-            <div
-              className={`absolute -top-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100 ${theme.glow}`}
-            />
+            config={config}
+            index={i}
+            total={MOODS.length}
+            selected={selected}
+            hoveredId={randomHighlight ?? hovered}
+            onSelect={handleSelect}
+            onHover={setHovered}
+            containerSize={containerSize}
+            orbitAngle={orbitAngle}
+          />
+        ))}
+      </div>
 
-            {/* Emoji */}
-            <div className={`relative inline-flex items-center justify-center w-14 h-14 rounded-xl text-3xl mb-4 ${theme.glow}`}>
-              {config.emoji}
-            </div>
-
-            {/* Text */}
-            <div className="relative">
-              <div className="flex items-center justify-between mb-1">
-                <h3 className={`text-lg font-semibold ${theme.label}`}>{config.label}</h3>
-                <span className={`text-lg opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 ${theme.label}`}>
-                  →
-                </span>
-              </div>
-              <p className={`text-sm leading-relaxed ${theme.desc}`}>{config.description}</p>
-            </div>
-          </button>
-        )
-      })}
+      <div
+        className="flex justify-center mt-4"
+        style={{ visibility: activeMood ? "visible" : "hidden" }}
+      >
+        <button
+          onClick={() => onSelect(selected!)}
+          className="px-9 py-3.5 rounded-[14px] border-0 text-black text-md font-bold cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03]"
+          style={{
+            background: activeMood
+              ? `linear-gradient(135deg, ${activeMood.theme.color1}, rgba(255, 255, 255, 0.14))`
+              : "transparent",
+            boxShadow: activeMood
+              ? `0 8px 30px ${activeMood.theme.color1}44`
+              : "none",
+          }}
+        >
+          {activeMood
+            ? `Show me ${activeMood.label.toLowerCase()} movies →`
+            : "placeholder"}
+        </button>
+      </div>
     </div>
-  )
-}
+  );
+};

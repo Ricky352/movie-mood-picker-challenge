@@ -1,4 +1,3 @@
-
 export const Header = () => {
   return (
     <header className="flex items-center justify-between py-6">
@@ -12,9 +11,7 @@ export const Header = () => {
         {/*  🎬*/}
         {/*</div>*/}
         <div>
-          <h1 className="text-xl font-extrabold text-white">
-            Mood Picker
-          </h1>
+          <h1 className="text-xl font-extrabold text-white">Mood Picker</h1>
           <p className="text-xs text-white/35 uppercase tracking-widest">
             Movies for every feeling
           </p>
@@ -49,5 +46,5 @@ export const Header = () => {
       {/*  </button>*/}
       {/*</div>*/}
     </header>
-  )
-}
+  );
+};

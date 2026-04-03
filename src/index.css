@@ -51,3 +51,7 @@ body {
   background-attachment: fixed;
   transition: --mood-accent 700ms ease;
 }
+
+* {
+  /*border: 1px solid white;*/
+}

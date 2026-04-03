@@ -18,7 +18,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-yellow-100",
       desc: "text-yellow-200/60",
       glow: "bg-yellow-400/20",
-      accent: "#eab308",
+      color1: "#FFD93D",
+      color2: "#FF8C42",
     },
   },
   {
@@ -34,7 +35,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-blue-100",
       desc: "text-blue-200/60",
       glow: "bg-blue-400/20",
-      accent: "#3b82f6",
+      color1: "#6C63FF",
+      color2: "#3F3D9E",
     },
   },
   {
@@ -50,7 +52,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-orange-100",
       desc: "text-orange-200/60",
       glow: "bg-orange-400/20",
-      accent: "#f97316",
+      color1: "#FF6B6B",
+      color2: "#EE3EC9",
     },
   },
   {
@@ -66,7 +69,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-pink-100",
       desc: "text-pink-200/60",
       glow: "bg-pink-400/20",
-      accent: "#ec4899",
+      color1: "#FF9A9E",
+      color2: "#FAD0C4",
     },
   },
   {
@@ -82,7 +86,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-purple-100",
       desc: "text-purple-200/60",
       glow: "bg-purple-400/20",
-      accent: "#a855f7",
+      color1: "#00D2FF",
+      color2: "#0FFFCF",
     },
   },
   {
@@ -98,7 +103,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-emerald-100",
       desc: "text-emerald-200/60",
       glow: "bg-emerald-400/20",
-      accent: "#10b981",
+      color1: "#11998E",
+      color2: "#38EF7D",
     },
   },
   {
@@ -114,7 +120,8 @@ export const MOODS: MoodConfig[] = [
       label: "text-slate-100",
       desc: "text-slate-300/60",
       glow: "bg-slate-400/20",
-      accent: "#64748b",
+      color1: "#C471F5",
+      color2: "#FA71CD",
     },
   },
 ];
