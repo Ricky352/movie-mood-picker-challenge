@@ -31,6 +31,12 @@ const DEFAULT_ACCENT = "rgba(47, 42, 60, 0.7)";
 
 const MoodPage = () => {
   const navigate = useNavigate();
+  const [exiting, setExiting] = useState(false);
+
+  const handleBack = () => {
+    setExiting(true);
+    setTimeout(() => navigate("/"), 300);
+  };
 
   const { mood } = useParams<{ mood: string }>();
   const { movies, loading, error, loadMovies } = useMovies();
@@ -88,9 +94,12 @@ const MoodPage = () => {
   const handleRetry = () => loadMovies(mood as Mood);
 
   return (
-    <main className="flex-1 py-8">
+    <main
+      className="flex-1 py-8"
+      style={{ animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both` }}
+    >
       <button
-        onClick={() => navigate("/")}
+        onClick={handleBack}
         className="mb-6 text-lilac-ash-400 hover:text-lilac-ash-200 transition-colors"
       >
         ← Back to moods
@@ -134,14 +143,18 @@ const MoodPage = () => {
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [exiting, setExiting] = useState(false);
 
   const handleMoodSelect = (mood: Mood) => {
-    navigate(`/${mood}`);
+    setExiting(true);
+    setTimeout(() => navigate(`/${mood}`), 300);
   };
 
   return (
-    <main className="flex-1 flex flex-col">
-      {/*<p className="text-lilac-ash-300 mb-6">How are you feeling today?</p>*/}
+    <main
+      className="flex-1 flex flex-col"
+      style={{ animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both` }}
+    >
       <MoodSelector onSelect={handleMoodSelect} />
     </main>
   );
