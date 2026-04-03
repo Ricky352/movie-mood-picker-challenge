@@ -96,7 +96,9 @@ const MoodPage = () => {
   return (
     <main
       className="flex-1 py-8"
-      style={{ animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both` }}
+      style={{
+        animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both`,
+      }}
     >
       <button
         onClick={handleBack}
@@ -153,7 +155,9 @@ const HomePage = () => {
   return (
     <main
       className="flex-1 flex flex-col"
-      style={{ animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both` }}
+      style={{
+        animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both`,
+      }}
     >
       <MoodSelector onSelect={handleMoodSelect} />
     </main>
