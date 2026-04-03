@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { CustomMoodConfig } from "../types/customMood";
-import { useFocusTrap } from "../hooks/useFocusTrap";
+import type { CustomMoodConfig } from "../../types/customMood.ts";
+import { useFocusTrap } from "../../hooks/useFocusTrap.ts";
 
 interface CreateMoodModalProps {
   onClose: () => void;

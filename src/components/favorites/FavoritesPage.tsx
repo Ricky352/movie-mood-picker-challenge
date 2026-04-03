@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "../hooks/useFavorites";
-import { MovieGrid } from "./MovieGrid";
+import { useFavorites } from "../../hooks/useFavorites.ts";
+import { MovieGrid } from "../movie/MovieGrid.tsx";
 
 export const FavoritesPage = () => {
   const navigate = useNavigate();

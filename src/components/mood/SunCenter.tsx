@@ -1,4 +1,4 @@
-import type { UnifiedMoodConfig } from "../types/customMood";
+import type { UnifiedMoodConfig } from "../../types/customMood.ts";
 
 interface SunProps {
   onRandomPick: () => void;

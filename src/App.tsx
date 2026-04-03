@@ -3,12 +3,12 @@ import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import { getMoodConfig } from "./constants/moods";
 import { useMovies } from "./hooks/useMovies";
 import { useCustomMoods } from "./hooks/useCustomMoods";
-import { Header } from "./components/Header";
-import { MoodSelector } from "./components/MoodSelector";
-import { MovieGrid } from "./components/MovieGrid";
-import { LoadingState } from "./components/LoadingState";
-import { ErrorState } from "./components/ErrorState";
-import { FavoritesPage } from "./components/FavoritesPage";
+import { Header } from "./components/ui/Header.tsx";
+import { MoodSelector } from "./components/mood/MoodSelector.tsx";
+import { MovieGrid } from "./components/movie/MovieGrid.tsx";
+import { LoadingState } from "./components/ui/LoadingState.tsx";
+import { ErrorState } from "./components/ui/ErrorState.tsx";
+import { FavoritesPage } from "./components/favorites/FavoritesPage.tsx";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { CustomMoodsProvider } from "./context/CustomMoodsContext";
 import { hexToRgba } from "./utils/colours";
@@ -63,7 +63,6 @@ const MoodPage = () => {
     };
   }, [moodConfig]);
 
-  // TODO: Change styling later
   if (!mood || !moodConfig) {
     return (
       <main className="flex-1 flex flex-col items-center justify-center gap-4 text-center">
@@ -113,22 +112,6 @@ const MoodPage = () => {
           </h2>
           <p className="text-sm text-lilac-ash-400">{moodConfig.description}</p>
         </div>
-      </div>
-
-      {/* TODO: remove debug*/}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setDebugLoading((v) => !v)}
-          className="text-xs px-2 py-1 rounded bg-lilac-ash-800 text-lilac-ash-300 hover:bg-lilac-ash-700"
-        >
-          {debugLoading ? "Stop loading" : "Trigger loading"}
-        </button>
-        <button
-          onClick={() => setDebugError((v) => (v ? null : "Simulated error"))}
-          className="text-xs px-2 py-1 rounded bg-lilac-ash-800 text-lilac-ash-300 hover:bg-lilac-ash-700"
-        >
-          {debugError ? "Clear error" : "Trigger error"}
-        </button>
       </div>
 
       {isLoading && <LoadingState />}

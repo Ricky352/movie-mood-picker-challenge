@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "../hooks/useFavorites";
+import { useFavorites } from "../../hooks/useFavorites.ts";
 
 export const Header = () => {
   const navigate = useNavigate();

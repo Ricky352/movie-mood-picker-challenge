@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { Movie } from "../types/movie";
-import { MovieCard } from "./MovieCard";
-import { MovieModal } from "./MovieModal";
+import type { Movie } from "../../types/movie.ts";
+import { MovieCard } from "./MovieCard.tsx";
+import { MovieModal } from "./MovieModal.tsx";
 
 interface MovieGridProps {
   movies: Movie[];

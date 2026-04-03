@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { MOODS } from "../constants/moods";
-import type { UnifiedMoodConfig } from "../types/customMood";
-import { SunCenter } from "./SunCenter";
-import { MoodBubble } from "./MoodBubble";
-import { CreateMoodModal } from "./CreateMoodModal";
-import { useContainerSize } from "../hooks/useContainerSize";
-import { useOrbitAnimation } from "../hooks/useOrbitAnimation";
-import { useMoodAccent } from "../hooks/useMoodAccent";
-import { useRandomMoodSpin } from "../hooks/useRandomMoodSpin";
-import { useCustomMoods } from "../hooks/useCustomMoods";
+import { MOODS } from "../../constants/moods.ts";
+import type { UnifiedMoodConfig } from "../../types/customMood.ts";
+import { SunCenter } from "./SunCenter.tsx";
+import { MoodBubble } from "./MoodBubble.tsx";
+import { CreateMoodModal } from "./CreateMoodModal.tsx";
+import { useContainerSize } from "../../hooks/useContainerSize.ts";
+import { useOrbitAnimation } from "../../hooks/useOrbitAnimation.ts";
+import { useMoodAccent } from "../../hooks/useMoodAccent.ts";
+import { useRandomMoodSpin } from "../../hooks/useRandomMoodSpin.ts";
+import { useCustomMoods } from "../../hooks/useCustomMoods.ts";
 
 interface MoodSelectorProps {
   onSelect: (id: string) => void;

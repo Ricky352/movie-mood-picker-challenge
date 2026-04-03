@@ -1,5 +1,5 @@
-import type { Movie } from "../types/movie";
-import { useFavorites } from "../hooks/useFavorites";
+import type { Movie } from "../../types/movie.ts";
+import { useFavorites } from "../../hooks/useFavorites.ts";
 
 interface MovieCardProps {
   movie: Movie;

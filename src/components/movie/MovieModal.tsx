@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import type { Movie } from "../types/movie";
-import { useFavorites } from "../hooks/useFavorites";
-import { useFocusTrap } from "../hooks/useFocusTrap";
+import type { Movie } from "../../types/movie.ts";
+import { useFavorites } from "../../hooks/useFavorites.ts";
+import { useFocusTrap } from "../../hooks/useFocusTrap.ts";
 
 interface MovieModalProps {
   movie: Movie;
