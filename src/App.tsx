@@ -100,21 +100,23 @@ const MoodPage = () => {
         animation: `${exiting ? "page-exit" : "page-enter"} 0.3s ease both`,
       }}
     >
-      <button
-        onClick={handleBack}
-        className="mb-6 text-lilac-ash-400 hover:text-lilac-ash-200 transition-colors"
-      >
-        ← Back to moods
-      </button>
+      <div className="flex items-center gap-4 mb-6">
+        <button
+            onClick={handleBack}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-lilac-ash-400 hover:text-lilac-ash-100 bg-lilac-ash-800/60 hover:bg-lilac-ash-700/60 border border-lilac-ash-700/50 transition-all duration-200 cursor-pointer"
+        >
+          ←
+        </button>
 
-      {moodConfig && (
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-lilac-ash-50">
-            {moodConfig.emoji} {moodConfig.label} movies
-          </h2>
-          <p className="text-lilac-ash-400">{moodConfig.description}</p>
-        </div>
-      )}
+        {moodConfig && (
+            <div>
+              <h2 className="text-xl font-semibold text-lilac-ash-50 leading-tight">
+                {moodConfig.emoji} {moodConfig.label} movies
+              </h2>
+              <p className="text-sm text-lilac-ash-400">{moodConfig.description}</p>
+            </div>
+        )}
+      </div>
 
       {/* TODO: remove debug*/}
       <div className="flex gap-2 mb-4">
