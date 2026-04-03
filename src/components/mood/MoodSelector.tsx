@@ -107,7 +107,7 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
       <div className="flex flex-col items-center mt-4">
         <button
           onClick={() => setShowCreate(true)}
-          className="text-xs text-white/35 hover:text-white/65 transition-colors duration-200 cursor-pointer underline underline-offset-2 decoration-white/20"
+          className="text-md text-white/55 hover:text-white transition-colors duration-200 cursor-pointer underline underline-offset-2"
         >
           + Custom mood
         </button>
