@@ -130,7 +130,7 @@ export const MoodBubble = ({
             className="mt-1 text-white/40 hover:text-red-400 transition-colors duration-200 cursor-pointer"
             style={{ fontSize: `${containerSize * 0.014}px` }}
           >
-            Delete
+            <span aria-hidden="true">✕</span> Delete
           </button>
         )}
       </div>
