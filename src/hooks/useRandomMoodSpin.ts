@@ -1,34 +1,34 @@
 import { useState, useRef } from "react";
-import { MOODS } from "../constants/moods";
-import type { Mood } from "../types/mood";
 
 interface UseRandomMoodSpinResult {
   spinning: boolean;
-  randomHighlight: Mood | null;
-  handleRandomPick: (onSettled: (mood: Mood) => void) => void;
+  randomHighlight: string | null;
+  handleRandomPick: (ids: string[], onSettled: (id: string) => void) => void;
 }
 
 export const useRandomMoodSpin = (): UseRandomMoodSpinResult => {
   const [spinning, setSpinning] = useState(false);
-  const [randomHighlight, setRandomHighlight] = useState<Mood | null>(null);
+  const [randomHighlight, setRandomHighlight] = useState<string | null>(null);
   const spinTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const handleRandomPick = (onSettled: (mood: Mood) => void) => {
-    if (spinning) return;
+  const handleRandomPick = (
+    ids: string[],
+    onSettled: (id: string) => void,
+  ) => {
+    if (spinning || ids.length === 0) return;
     setSpinning(true);
 
-    const finalIndex = Math.floor(Math.random() * MOODS.length);
+    const finalIndex = Math.floor(Math.random() * ids.length);
     const minFlashes = 14;
 
     // Compute extra steps so the last flash lands exactly on finalIndex
     const extra =
-      (finalIndex - ((minFlashes - 1) % MOODS.length) + MOODS.length) %
-      MOODS.length;
+      (finalIndex - ((minFlashes - 1) % ids.length) + ids.length) % ids.length;
     const totalFlashes = minFlashes + extra;
 
     const flash = (count: number) => {
-      const idx = count % MOODS.length;
-      setRandomHighlight(MOODS[idx].mood);
+      const idx = count % ids.length;
+      setRandomHighlight(ids[idx]);
 
       if (count < totalFlashes - 1) {
         const progress = count / totalFlashes;
@@ -40,7 +40,7 @@ export const useRandomMoodSpin = (): UseRandomMoodSpinResult => {
         spinTimeoutRef.current = setTimeout(() => {
           setRandomHighlight(null);
           setSpinning(false);
-          onSettled(MOODS[finalIndex].mood);
+          onSettled(ids[finalIndex]);
         }, 450);
       }
     };

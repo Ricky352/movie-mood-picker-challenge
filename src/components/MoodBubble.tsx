@@ -1,15 +1,16 @@
-import type { Mood, MoodConfig } from "../types/mood";
+import type { UnifiedMoodConfig } from "../types/customMood";
 
 export interface BubbleProps {
-  config: MoodConfig;
+  config: UnifiedMoodConfig;
   index: number;
   total: number;
-  selected: Mood | null;
-  hoveredId: Mood | null;
-  onSelect: (mood: Mood) => void;
-  onHover: (mood: Mood | null) => void;
+  selected: string | null;
+  hoveredId: string | null;
+  onSelect: (id: string) => void;
+  onHover: (id: string | null) => void;
   containerSize: number;
   orbitAngle: number;
+  onDelete?: () => void;
 }
 
 const getHexWithAlpha = (hex: string, alpha: string) => `${hex}${alpha}`;
@@ -24,9 +25,10 @@ export const MoodBubble = ({
   onHover,
   containerSize,
   orbitAngle,
+  onDelete,
 }: BubbleProps) => {
-  const isSelected = selected === config.mood;
-  const isHovered = hoveredId === config.mood;
+  const isSelected = selected === config.id;
+  const isHovered = hoveredId === config.id;
   const isDimmed = (selected || hoveredId) && !isSelected && !isHovered;
 
   const baseAngle = (index / total) * Math.PI * 2 - Math.PI / 2;
@@ -59,9 +61,9 @@ export const MoodBubble = ({
 
   return (
     <div
-      onMouseEnter={() => onHover(config.mood)}
+      onMouseEnter={() => onHover(config.id)}
       onMouseLeave={() => onHover(null)}
-      onClick={() => onSelect(config.mood)}
+      onClick={() => onSelect(config.id)}
       className={`absolute left-1/2 top-1/2 cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isSelected || isHovered ? "z-10" : "z-1"
       }`}
@@ -105,6 +107,19 @@ export const MoodBubble = ({
         >
           {config.label}
         </span>
+
+        {isSelected && onDelete && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="mt-1 text-white/40 hover:text-red-400 transition-colors duration-200 cursor-pointer"
+            style={{ fontSize: `${containerSize * 0.014}px` }}
+          >
+            ✕ Delete
+          </button>
+        )}
       </div>
     </div>
   );

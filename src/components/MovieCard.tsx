@@ -10,6 +10,11 @@ export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(movie.id);
 
+  const hours = movie.runtime ? Math.floor(movie.runtime / 60) : null;
+  const mins = movie.runtime ? movie.runtime % 60 : null;
+  const runtimeStr =
+    hours != null && mins != null ? `${hours}h ${mins}m` : null;
+
   return (
     <div
       onClick={onClick}
@@ -39,10 +44,16 @@ export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
         <h3 className="font-semibold text-lg text-lilac-ash-50 leading-tight">
           {movie.title}
         </h3>
-        <div className="flex items-center gap-2 text-sm text-lilac-ash-400 mt-1">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-lilac-ash-400 mt-1">
           <span>{movie.releaseYear}</span>
-          <span>•</span>
-          <span>★ {movie.rating.toFixed(1)}</span>
+          {runtimeStr && (
+            <>
+              <span>·</span>
+              <span>{runtimeStr}</span>
+            </>
+          )}
+          <span>·</span>
+          <span className="text-yellow-400 font-medium">★ {movie.rating.toFixed(1)}</span>
         </div>
         <p className="text-sm text-lilac-ash-300 mt-2 line-clamp-3">
           {movie.overview}

@@ -1,10 +1,8 @@
-import { MOODS } from "../constants/moods";
-import type { Mood } from "../types/mood";
+import type { UnifiedMoodConfig } from "../types/customMood";
 
 interface SunProps {
   onRandomPick: () => void;
-  hoveredMood: Mood | null;
-  selectedMood: Mood | null;
+  activeMoodConfig: UnifiedMoodConfig | null;
   sunHovered: boolean;
   onSunHover: (v: boolean) => void;
   containerSize: number;
@@ -12,16 +10,13 @@ interface SunProps {
 
 export const SunCenter = ({
   onRandomPick,
-  hoveredMood,
-  selectedMood,
+  activeMoodConfig,
   sunHovered,
   onSunHover,
   containerSize,
 }: SunProps) => {
-  const activeMood = MOODS.find(
-    (m) => m.mood === (selectedMood || hoveredMood),
-  );
-  const { color1, color2 } = activeMood?.theme ?? {};
+  const color1 = activeMoodConfig?.theme.color1;
+  const color2 = activeMoodConfig?.theme.color2;
 
   const orbSize = containerSize * 0.32;
   const labelSize = containerSize * 0.044;
@@ -36,7 +31,7 @@ export const SunCenter = ({
         onClick={onRandomPick}
         onMouseEnter={() => onSunHover(true)}
         onMouseLeave={() => onSunHover(false)}
-        className={`rounded-full cursor-pointer flex flex-col items-center justify-center transition-all duration-500 backdrop-blur-md ${sunHovered && !activeMood ? "scale-[1.08]" : ""}`}
+        className={`rounded-full cursor-pointer flex flex-col items-center justify-center transition-all duration-500 backdrop-blur-md ${sunHovered && !activeMoodConfig ? "scale-[1.08]" : ""}`}
         style={{
           width: `${orbSize}px`,
           height: `${orbSize}px`,
@@ -57,10 +52,10 @@ export const SunCenter = ({
             : "0 0 40px rgba(255,180,40,0.15), inset 0 0 30px rgba(255,200,60,0.08)",
         }}
       >
-        {activeMood ? (
+        {activeMoodConfig ? (
           <div className="text-center px-2.5">
             <div
-              key={activeMood.mood}
+              key={activeMoodConfig.id}
               className="font-extrabold tracking-[-0.03em] leading-[1.1] inline-block"
               style={{
                 fontSize: `${labelSize}px`,
@@ -71,14 +66,14 @@ export const SunCenter = ({
                 color: "transparent",
               }}
             >
-              {activeMood.label}
+              {activeMoodConfig.label}
             </div>
 
             <div
               className="text-white/40 mt-1 italic leading-[1.3]"
               style={{ fontSize: `${descSize}px` }}
             >
-              {activeMood.description}
+              {activeMoodConfig.description}
             </div>
           </div>
         ) : (

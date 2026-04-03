@@ -1,39 +1,59 @@
 import { useState } from "react";
 import { MOODS } from "../constants/moods";
-import type { Mood } from "../types/mood";
+import type { UnifiedMoodConfig } from "../types/customMood";
 import { SunCenter } from "./SunCenter";
 import { MoodBubble } from "./MoodBubble";
+import { CreateMoodModal } from "./CreateMoodModal";
 import { useContainerSize } from "../hooks/useContainerSize";
 import { useOrbitAnimation } from "../hooks/useOrbitAnimation";
 import { useMoodAccent } from "../hooks/useMoodAccent";
 import { useRandomMoodSpin } from "../hooks/useRandomMoodSpin";
+import { useCustomMoods } from "../hooks/useCustomMoods";
 
 interface MoodSelectorProps {
-  onSelect: (mood: Mood) => void;
+  onSelect: (id: string) => void;
 }
 
 export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
-  const [selected, setSelected] = useState<Mood | null>(null);
-  const [hovered, setHovered] = useState<Mood | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const [sunHovered, setSunHovered] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+
+  const { customMoods, addCustomMood, deleteCustomMood } = useCustomMoods();
 
   const { containerRef, containerSize } = useContainerSize(480);
   const orbitAngle = useOrbitAnimation();
   const { spinning, randomHighlight, handleRandomPick } = useRandomMoodSpin();
 
-  useMoodAccent(selected, randomHighlight);
+  const builtInMoods: UnifiedMoodConfig[] = MOODS.map((m) => ({
+    id: m.mood,
+    label: m.label,
+    emoji: m.emoji,
+    description: m.description,
+    genreIds: m.genreIds,
+    theme: { color1: m.theme.color1, color2: m.theme.color2 },
+  }));
 
-  const handleSelect = (mood: Mood) => {
+  const allMoods: UnifiedMoodConfig[] = [
+    ...builtInMoods,
+    ...customMoods.map((m) => ({ ...m, isCustom: true })),
+  ];
+
+  const activeId = randomHighlight ?? selected;
+  const activeMoodConfig = allMoods.find((m) => m.id === activeId) ?? null;
+
+  useMoodAccent(activeMoodConfig?.theme.color1 ?? null);
+
+  const handleSelect = (id: string) => {
     if (spinning) return;
-    setSelected((prev) => (prev === mood ? null : mood));
+    setSelected((prev) => (prev === id ? null : id));
   };
 
   const handleRandom = () => {
     setSelected(null);
-    handleRandomPick((mood) => setSelected(mood));
+    handleRandomPick(allMoods.map((m) => m.id), (id) => setSelected(id));
   };
-
-  const activeMood = MOODS.find((m) => m.mood === selected);
 
   return (
     <div className="flex-1 flex flex-col justify-center content-center ">
@@ -46,50 +66,75 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
 
         <SunCenter
           onRandomPick={handleRandom}
-          hoveredMood={hovered}
-          selectedMood={selected}
+          activeMoodConfig={activeMoodConfig}
           sunHovered={sunHovered}
           onSunHover={setSunHovered}
           containerSize={containerSize}
         />
 
-        {MOODS.map((config, i) => (
+        {allMoods.map((config, i) => (
           <MoodBubble
-            key={config.mood}
+            key={config.id}
             config={config}
             index={i}
-            total={MOODS.length}
+            total={allMoods.length}
             selected={selected}
             hoveredId={randomHighlight ?? hovered}
             onSelect={handleSelect}
             onHover={setHovered}
             containerSize={containerSize}
             orbitAngle={orbitAngle}
+            onDelete={
+              config.isCustom
+                ? () => {
+                    deleteCustomMood(config.id);
+                    if (selected === config.id) setSelected(null);
+                  }
+                : undefined
+            }
           />
         ))}
       </div>
 
-      <div
-        className="flex justify-center mt-4"
-        style={{ visibility: activeMood ? "visible" : "hidden" }}
-      >
-        <button
-          onClick={() => onSelect(selected!)}
-          className="px-9 py-3.5 rounded-[14px] border-0 text-black text-md font-bold cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03]"
-          style={{
-            background: activeMood
-              ? `linear-gradient(135deg, ${activeMood.theme.color1}, rgba(255, 255, 255, 0.14))`
-              : "transparent",
-            boxShadow: activeMood
-              ? `0 8px 30px ${activeMood.theme.color1}44`
-              : "none",
-          }}
+      <div className="flex flex-col items-center gap-3 mt-4">
+        <div
+          style={{ visibility: activeMoodConfig ? "visible" : "hidden" }}
         >
-          {activeMood
-            ? `Show me ${activeMood.label.toLowerCase()} movies →`
-            : "placeholder"}
+          <button
+            onClick={() => onSelect(selected!)}
+            className="px-9 py-3.5 rounded-[14px] border-0 text-black text-md font-bold cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03]"
+            style={{
+              background: activeMoodConfig
+                ? `linear-gradient(135deg, ${activeMoodConfig.theme.color1}, rgba(255, 255, 255, 0.14))`
+                : "transparent",
+              boxShadow: activeMoodConfig
+                ? `0 8px 30px ${activeMoodConfig.theme.color1}44`
+                : "none",
+            }}
+          >
+            {activeMoodConfig
+              ? `Show me ${activeMoodConfig.label.toLowerCase()} movies →`
+              : "placeholder"}
+          </button>
+        </div>
+
+        <button
+          onClick={() => setShowCreate(true)}
+          className="text-xs text-white/35 hover:text-white/65 transition-colors duration-200 cursor-pointer underline underline-offset-2 decoration-white/20"
+        >
+          + Custom mood
         </button>
       </div>
+
+      {showCreate && (
+        <CreateMoodModal
+          onClose={() => setShowCreate(false)}
+          onCreate={(mood) => {
+            addCustomMood(mood);
+            setShowCreate(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useParams } from "react-router-dom";
-import { getMoodConfig, MOODS } from "./constants/moods";
+import { getMoodConfig } from "./constants/moods";
 import { useMovies } from "./hooks/useMovies";
+import { useCustomMoods } from "./hooks/useCustomMoods";
 import { Header } from "./components/Header";
 import { MoodSelector } from "./components/MoodSelector";
 import { MovieGrid } from "./components/MovieGrid";
@@ -9,26 +10,10 @@ import { LoadingState } from "./components/LoadingState";
 import { ErrorState } from "./components/ErrorState";
 import { FavoritesPage } from "./components/FavoritesPage";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import { CustomMoodsProvider } from "./context/CustomMoodsContext";
 import { hexToRgba } from "./utils/colours";
-import type { Mood } from "./types/mood";
+import type { MoodConfig } from "./types/mood";
 
-/**
- * Entry point - wire your components here.
- *
- * Available data:
- *   MOODS        — array of MoodConfig (mood, label, emoji, description, genreIds)
- *   useMovies()  — returns { movies, loading, error, loadMovies(mood), reset() }
- *
- * Your job:
- *   1. Let the user pick a mood
- *   2. Call loadMovies(mood) to fetch suggestions
- *   3. Display the results (title, poster, rating, description)
- *   4. Handle loading & error states
- *
- * Check the README for the full API reference.
- */
-
-const VALID_MOODS = new Set(MOODS.map((m) => m.mood));
 const DEFAULT_ACCENT = "rgba(47, 42, 60, 0.7)";
 
 const MoodPage = () => {
@@ -42,6 +27,7 @@ const MoodPage = () => {
 
   const { mood } = useParams<{ mood: string }>();
   const { movies, loading, error, loadMovies } = useMovies();
+  const { customMoods } = useCustomMoods();
 
   const [debugLoading, setDebugLoading] = useState(false);
   const [debugError, setDebugError] = useState<string | null>(null);
@@ -49,29 +35,36 @@ const MoodPage = () => {
   const isLoading = loading || debugLoading;
   const activeError = error ?? debugError;
 
+  // Resolve mood config from built-in or custom moods
+  const builtIn = mood ? getMoodConfig(mood) : undefined;
+  const custom = mood ? customMoods.find((m) => m.id === mood) : undefined;
+  const moodConfig = builtIn ?? custom ?? null;
+
   useEffect(() => {
-    if (mood && VALID_MOODS.has(mood as Mood)) {
-      loadMovies(mood as Mood);
+    if (mood && moodConfig) {
+      loadMovies({
+        genreIds: moodConfig.genreIds,
+        tmdbParams: (moodConfig as MoodConfig).tmdbParams,
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadMovies, mood]);
 
   // Handle background gradient
   useEffect(() => {
-    const config = getMoodConfig(mood as Mood);
-    if (!config) return;
+    if (!moodConfig) return;
 
-    const color = hexToRgba(config.theme.color1, 0.25);
+    const color = hexToRgba(moodConfig.theme.color1, 0.25);
     if (!color) return;
 
     document.body.style.setProperty("--mood-accent", color);
-    // cleanup
     return () => {
       document.body.style.setProperty("--mood-accent", DEFAULT_ACCENT);
     };
-  }, [mood]);
+  }, [moodConfig]);
 
   // TODO: Change styling later
-  if (!mood || !VALID_MOODS.has(mood as Mood)) {
+  if (!mood || !moodConfig) {
     return (
       <main className="flex-1 flex flex-col items-center justify-center gap-4 text-center">
         <span className="text-5xl">🤔</span>
@@ -91,9 +84,12 @@ const MoodPage = () => {
     );
   }
 
-  const moodConfig = getMoodConfig(mood as Mood);
-
-  const handleRetry = () => loadMovies(mood as Mood);
+  const handleRetry = () => {
+    loadMovies({
+      genreIds: moodConfig.genreIds,
+      tmdbParams: (moodConfig as MoodConfig).tmdbParams,
+    });
+  };
 
   return (
     <main
@@ -110,14 +106,12 @@ const MoodPage = () => {
           ←
         </button>
 
-        {moodConfig && (
-            <div>
-              <h2 className="text-xl font-semibold text-lilac-ash-50 leading-tight">
-                {moodConfig.emoji} {moodConfig.label} movies
-              </h2>
-              <p className="text-sm text-lilac-ash-400">{moodConfig.description}</p>
-            </div>
-        )}
+        <div>
+          <h2 className="text-xl font-semibold text-lilac-ash-50 leading-tight">
+            {moodConfig.emoji} {moodConfig.label} movies
+          </h2>
+          <p className="text-sm text-lilac-ash-400">{moodConfig.description}</p>
+        </div>
       </div>
 
       {/* TODO: remove debug*/}
@@ -143,6 +137,15 @@ const MoodPage = () => {
       {!isLoading && !activeError && movies.length > 0 && (
         <MovieGrid movies={movies} />
       )}
+      {!isLoading && !activeError && movies.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+          <span className="text-5xl">🎬</span>
+          <h3 className="text-lg font-semibold text-lilac-ash-100">No movies found</h3>
+          <p className="text-sm text-lilac-ash-400 max-w-xs">
+            We couldn't find any movies matching this mood. Try a different one!
+          </p>
+        </div>
+      )}
     </main>
   );
 };
@@ -151,9 +154,9 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [exiting, setExiting] = useState(false);
 
-  const handleMoodSelect = (mood: Mood) => {
+  const handleMoodSelect = (id: string) => {
     setExiting(true);
-    setTimeout(() => navigate(`/${mood}`), 300);
+    setTimeout(() => navigate(`/${id}`), 300);
   };
 
   return (
@@ -171,15 +174,17 @@ const HomePage = () => {
 const App = () => {
   return (
     <FavoritesProvider>
-      <div className="flex flex-col min-h-screen max-w-6xl mx-auto px-4">
-        <Header />
+      <CustomMoodsProvider>
+        <div className="flex flex-col min-h-screen max-w-6xl mx-auto px-4">
+          <Header />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-          <Route path="/:mood" element={<MoodPage />} />
-        </Routes>
-      </div>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/:mood" element={<MoodPage />} />
+          </Routes>
+        </div>
+      </CustomMoodsProvider>
     </FavoritesProvider>
   );
 };
