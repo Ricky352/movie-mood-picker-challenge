@@ -90,6 +90,14 @@ export const SunCenter = ({
             >
               {activeMoodConfig.description}
             </div>
+
+              <div
+                  className="text-white/30 mt-1"
+                  style={{fontSize: `${descSize}px`}}
+              >
+                  →
+              </div>
+
           </div>
         ) : (
           <div className="text-center">
