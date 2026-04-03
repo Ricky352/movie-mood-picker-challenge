@@ -154,6 +154,6 @@ _Good luck. Have fun with it. 🍿_
 What I would improve with more time is definitely the mobile layout because it is kind of janky when swiping/scrolling etc. 
 I would also like to add dark and light theme support as well. Other than that, I would also like to implement a virtual scroller so the user can see more than 6 movies at once.
 The custom mood builder could also be improved by having more options and having the modal be fullscreen for mobile.
-
-Overall, there's a lot I would like to improve on this project
+One thing I definitely would improve is the separation of concerns between the services and the components.
+Overall, there's a lot I would like to improve on this project, but it's a good start in my opinion.
 
