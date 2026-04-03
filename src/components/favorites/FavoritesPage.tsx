@@ -7,7 +7,10 @@ export const FavoritesPage = () => {
   const { favorites } = useFavorites();
 
   return (
-    <main className="flex-1 py-8" style={{ animation: "page-enter 0.3s ease both" }}>
+    <main
+      className="flex-1 py-8"
+      style={{ animation: "page-enter 0.3s ease both" }}
+    >
       <div className="flex items-center gap-4 mb-6">
         <button
           onClick={() => navigate(-1)}
@@ -30,7 +33,9 @@ export const FavoritesPage = () => {
 
       {favorites.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center gap-3">
-          <span className="text-5xl text-red-500" aria-hidden="true">♡</span>
+          <span className="text-5xl text-red-500" aria-hidden="true">
+            ♡
+          </span>
           <p className="text-lilac-ash-400 text-sm">
             Heart a movie to save it here
           </p>

@@ -24,7 +24,10 @@ export const Header = () => {
         <span aria-hidden="true">♥</span>
         <span>Favorites</span>
         {favorites.length > 0 && (
-          <span aria-hidden="true" className="bg-white/10 text-white/80 text-xs px-1.5 py-0.5 rounded-full">
+          <span
+            aria-hidden="true"
+            className="bg-white/10 text-white/80 text-xs px-1.5 py-0.5 rounded-full"
+          >
             {favorites.length}
           </span>
         )}

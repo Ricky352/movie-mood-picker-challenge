@@ -75,7 +75,11 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
         <div className="absolute top-3 right-3 flex gap-2">
           <button
             onClick={() => toggleFavorite(movie)}
-            aria-label={favorited ? `Remove ${movie.title} from favorites` : `Add ${movie.title} to favorites`}
+            aria-label={
+              favorited
+                ? `Remove ${movie.title} from favorites`
+                : `Add ${movie.title} to favorites`
+            }
             aria-pressed={favorited}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${favorited ? "bg-black/60 text-red-400" : "bg-black/40 text-white/60 hover:text-red-400"}`}
           >
@@ -103,7 +107,10 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
 
           {/* Title block */}
           <div className="flex flex-col justify-center">
-            <h2 id="movie-modal-title" className="text-xl font-bold text-white leading-tight">
+            <h2
+              id="movie-modal-title"
+              className="text-xl font-bold text-white leading-tight"
+            >
               {movie.title}
             </h2>
             {movie.tagline && (

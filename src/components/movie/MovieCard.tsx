@@ -43,8 +43,15 @@ export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
 
       {/* Favorite button */}
       <button
-        onClick={(e) => { e.stopPropagation(); toggleFavorite(movie); }}
-        aria-label={favorited ? `Remove ${movie.title} from favorites` : `Add ${movie.title} to favorites`}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleFavorite(movie);
+        }}
+        aria-label={
+          favorited
+            ? `Remove ${movie.title} from favorites`
+            : `Add ${movie.title} to favorites`
+        }
         aria-pressed={favorited}
         className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer opacity-0 group-hover:opacity-100 ${favorited ? "opacity-100 bg-black/60 text-red-400" : "bg-black/40 text-white/70 hover:text-red-400"}`}
       >
@@ -64,7 +71,9 @@ export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
             </>
           )}
           <span>·</span>
-          <span className="text-yellow-400 font-medium">★ {movie.rating.toFixed(1)}</span>
+          <span className="text-yellow-400 font-medium">
+            ★ {movie.rating.toFixed(1)}
+          </span>
         </div>
         <p className="text-sm text-lilac-ash-300 mt-2 line-clamp-3">
           {movie.overview}

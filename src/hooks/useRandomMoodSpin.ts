@@ -11,10 +11,7 @@ export const useRandomMoodSpin = (): UseRandomMoodSpinResult => {
   const [randomHighlight, setRandomHighlight] = useState<string | null>(null);
   const spinTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const handleRandomPick = (
-    ids: string[],
-    onSettled: (id: string) => void,
-  ) => {
+  const handleRandomPick = (ids: string[], onSettled: (id: string) => void) => {
     if (spinning || ids.length === 0) return;
     setSpinning(true);
 

@@ -37,7 +37,10 @@ const COLOR_PRESETS = [
   { color1: "#06b6d4", color2: "#0891b2" },
 ];
 
-export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => {
+export const CreateMoodModal = ({
+  onClose,
+  onCreate,
+}: CreateMoodModalProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(dialogRef, true);
 
@@ -111,7 +114,9 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/8">
-          <h2 id="create-mood-title" className="text-lg font-bold text-white">Create custom mood</h2>
+          <h2 id="create-mood-title" className="text-lg font-bold text-white">
+            Create custom mood
+          </h2>
           <button
             onClick={onClose}
             aria-label="Close"
@@ -125,7 +130,10 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
           {/* Emoji + Name */}
           <div className="flex gap-3 items-start">
             <div className="flex flex-col items-center gap-1">
-              <label htmlFor="mood-emoji" className="text-xs text-white/40 uppercase tracking-wider">
+              <label
+                htmlFor="mood-emoji"
+                className="text-xs text-white/40 uppercase tracking-wider"
+              >
                 Emoji
               </label>
               <input
@@ -143,8 +151,14 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
             </div>
 
             <div className="flex-1 flex flex-col gap-1">
-              <label htmlFor="mood-name" className="text-xs text-white/40 uppercase tracking-wider">
-                Name <span className="text-red-400/70" aria-hidden="true">*</span>
+              <label
+                htmlFor="mood-name"
+                className="text-xs text-white/40 uppercase tracking-wider"
+              >
+                Name{" "}
+                <span className="text-red-400/70" aria-hidden="true">
+                  *
+                </span>
               </label>
               <input
                 id="mood-name"
@@ -155,7 +169,10 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
                 aria-required="true"
                 className="w-full px-3 py-2.5 bg-white/6 border border-white/10 rounded-xl text-white placeholder-white/25 focus:outline-none focus:border-white/25 text-sm"
               />
-              <label htmlFor="mood-description" className="text-xs text-white/40 uppercase tracking-wider mt-2">
+              <label
+                htmlFor="mood-description"
+                className="text-xs text-white/40 uppercase tracking-wider mt-2"
+              >
                 Description
               </label>
               <input
@@ -172,7 +189,10 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
           {/* Genres */}
           <div>
             <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">
-              Genres <span className="text-red-400/70" aria-hidden="true">*</span>
+              Genres{" "}
+              <span className="text-red-400/70" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="flex flex-wrap gap-2">
               {TMDB_GENRES.map((genre) => {

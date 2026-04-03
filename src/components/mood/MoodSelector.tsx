@@ -54,7 +54,10 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
     if (selected) {
       onSelect(selected);
     } else {
-      handleRandomPick(allMoods.map((m) => m.id), (id) => setSelected(id));
+      handleRandomPick(
+        allMoods.map((m) => m.id),
+        (id) => setSelected(id),
+      );
     }
   };
 

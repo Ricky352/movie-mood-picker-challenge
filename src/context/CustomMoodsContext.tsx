@@ -18,8 +18,7 @@ interface CustomMoodsContextValue {
   deleteCustomMood: (id: string) => void;
 }
 
-const CustomMoodsContext =
-  createContext<CustomMoodsContextValue | null>(null);
+const CustomMoodsContext = createContext<CustomMoodsContextValue | null>(null);
 
 export const CustomMoodsProvider = ({
   children,

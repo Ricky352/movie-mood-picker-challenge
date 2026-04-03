@@ -29,11 +29,8 @@ const MoodPage = () => {
   const { movies, loading, error, loadMovies } = useMovies();
   const { customMoods } = useCustomMoods();
 
-  const [debugLoading] = useState(false);
-  const [debugError] = useState<string | null>(null);
-
-  const isLoading = loading || debugLoading;
-  const activeError = error ?? debugError;
+  const isLoading = loading;
+  const activeError = error;
 
   // Resolve mood config from built-in or custom moods
   const builtIn = mood ? getMoodConfig(mood) : undefined;
@@ -99,9 +96,9 @@ const MoodPage = () => {
     >
       <div className="flex items-center gap-4 mb-6">
         <button
-            onClick={handleBack}
-            aria-label="Back to moods"
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-lilac-ash-400 hover:text-lilac-ash-100 bg-lilac-ash-800/60 hover:bg-lilac-ash-700/60 border border-lilac-ash-700/50 transition-all duration-200 cursor-pointer"
+          onClick={handleBack}
+          aria-label="Back to moods"
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-lilac-ash-400 hover:text-lilac-ash-100 bg-lilac-ash-800/60 hover:bg-lilac-ash-700/60 border border-lilac-ash-700/50 transition-all duration-200 cursor-pointer"
         >
           <span aria-hidden="true">←</span>
         </button>
@@ -124,7 +121,9 @@ const MoodPage = () => {
       {!isLoading && !activeError && movies.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
           <span className="text-5xl">🎬</span>
-          <h3 className="text-lg font-semibold text-lilac-ash-100">No movies found</h3>
+          <h3 className="text-lg font-semibold text-lilac-ash-100">
+            No movies found
+          </h3>
           <p className="text-sm text-lilac-ash-400 max-w-xs">
             We couldn't find any movies matching this mood. Try a different one!
           </p>

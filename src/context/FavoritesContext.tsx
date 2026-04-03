@@ -20,7 +20,11 @@ interface FavoritesContextValue {
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
-export const FavoritesProvider = ({ children }: { children: React.ReactNode }) => {
+export const FavoritesProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [favorites, setFavorites] = useState<Movie[]>(load);
 
   const toggleFavorite = useCallback((movie: Movie) => {
@@ -39,7 +43,9 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
   );
 
   return (
-    <FavoritesContext.Provider value={{ favorites, isFavorite, toggleFavorite }}>
+    <FavoritesContext.Provider
+      value={{ favorites, isFavorite, toggleFavorite }}
+    >
       {children}
     </FavoritesContext.Provider>
   );

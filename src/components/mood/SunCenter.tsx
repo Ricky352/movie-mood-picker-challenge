@@ -30,7 +30,11 @@ export const SunCenter = ({
       <div
         role="button"
         tabIndex={0}
-        aria-label={activeMoodConfig ? `${activeMoodConfig.label} selected` : "Pick a random mood"}
+        aria-label={
+          activeMoodConfig
+            ? `${activeMoodConfig.label} selected`
+            : "Pick a random mood"
+        }
         onClick={onRandomPick}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
