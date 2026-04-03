@@ -124,3 +124,36 @@ Feel free to:
 ---
 
 _Good luck. Have fun with it. 🍿_
+
+
+---
+## Short note
+
+### Technical Choices
+
+**Architecture & State Management**
+
+- **React Router** for client-side routing with smooth page transitions 
+- **Custom hooks** pattern (`useMovies`, `useFavorites`, `useCustomMoods`) to and keep
+  components clean and logic separated
+
+**UI & Styling**
+
+- **Dynamic theming** using CSS custom properties (`--mood-accent`) that change based on selected mood
+- **Responsive grid layout** that adapts from 1 to 3 columns based on viewport
+
+**User Experience**
+
+- **Modal-based detail view** for movie information without navigating away
+- **Error boundaries** handle errors when no movies are found or there is a server error
+- **Gradient backgrounds** that subtly shift color based on mood theme
+- Fetching all movies simultaneously to prevent loading when clicking on movies
+
+### What I Would Improve With More Time
+
+What I would improve with more time is definitely the mobile layout because it is kind of janky when swiping/scrolling etc. 
+I would also like to add dark and light theme support as well. Other than that, I would also like to implement a virtual scroller so the user can see more than 6 movies at once.
+The custom mood builder could also be improved by having more options and having the modal be fullscreen for mobile.
+
+Overall, there's a lot I would like to improve on this project
+
