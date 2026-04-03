@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { Movie } from "../types/movie";
 import { useFavorites } from "../hooks/useFavorites";
+import { useFocusTrap } from "../hooks/useFocusTrap";
 
 interface MovieModalProps {
   movie: Movie;
@@ -9,6 +10,9 @@ interface MovieModalProps {
 }
 
 export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, true);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -40,13 +44,19 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
       className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/45 backdrop-blur-lg"
       style={{ animation: "modal-backdrop-enter 0.25s ease both" }}
       onClick={onClose}
+      aria-hidden="true"
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="movie-modal-title"
         className="relative w-full sm:max-w-2xl rounded-2xl bg-lilac-ash-900 border border-white/8"
         style={{
           animation: "modal-card-enter 0.35s cubic-bezier(0.16,1,0.3,1) both",
         }}
         onClick={(e) => e.stopPropagation()}
+        aria-hidden="false"
       >
         {/* Backdrop image */}
         {movie.backdropUrl ? (
@@ -65,15 +75,18 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
         <div className="absolute top-3 right-3 flex gap-2">
           <button
             onClick={() => toggleFavorite(movie)}
+            aria-label={favorited ? `Remove ${movie.title} from favorites` : `Add ${movie.title} to favorites`}
+            aria-pressed={favorited}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${favorited ? "bg-black/60 text-red-400" : "bg-black/40 text-white/60 hover:text-red-400"}`}
           >
-            {favorited ? "♥" : "♡"}
+            <span aria-hidden="true">{favorited ? "♥" : "♡"}</span>
           </button>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white/60 hover:text-white transition-colors cursor-pointer"
           >
-            ✕
+            <span aria-hidden="true">✕</span>
           </button>
         </div>
 
@@ -90,7 +103,7 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
 
           {/* Title block */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-xl font-bold text-white leading-tight">
+            <h2 id="movie-modal-title" className="text-xl font-bold text-white leading-tight">
               {movie.title}
             </h2>
             {movie.tagline && (

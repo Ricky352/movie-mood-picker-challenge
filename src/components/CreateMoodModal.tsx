@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CustomMoodConfig } from "../types/customMood";
+import { useFocusTrap } from "../hooks/useFocusTrap";
 
 interface CreateMoodModalProps {
   onClose: () => void;
@@ -37,6 +38,9 @@ const COLOR_PRESETS = [
 ];
 
 export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, true);
+
   const [emoji, setEmoji] = useState("✨");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -91,22 +95,29 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
       className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/45 backdrop-blur-lg"
       style={{ animation: "modal-backdrop-enter 0.25s ease both" }}
       onClick={onClose}
+      aria-hidden="true"
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-mood-title"
         className="relative w-full sm:max-w-lg rounded-2xl bg-lilac-ash-900 border border-white/8 overflow-hidden"
         style={{
           animation: "modal-card-enter 0.35s cubic-bezier(0.16,1,0.3,1) both",
         }}
         onClick={(e) => e.stopPropagation()}
+        aria-hidden="false"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/8">
-          <h2 className="text-lg font-bold text-white">Create custom mood</h2>
+          <h2 id="create-mood-title" className="text-lg font-bold text-white">Create custom mood</h2>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="w-8 h-8 rounded-full flex items-center justify-center bg-white/6 text-white/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
-            ✕
+            <span aria-hidden="true">✕</span>
           </button>
         </div>
 
@@ -114,10 +125,11 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
           {/* Emoji + Name */}
           <div className="flex gap-3 items-start">
             <div className="flex flex-col items-center gap-1">
-              <label className="text-xs text-white/40 uppercase tracking-wider">
+              <label htmlFor="mood-emoji" className="text-xs text-white/40 uppercase tracking-wider">
                 Emoji
               </label>
               <input
+                id="mood-emoji"
                 type="text"
                 value={emoji}
                 onChange={(e) => {
@@ -131,20 +143,23 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
             </div>
 
             <div className="flex-1 flex flex-col gap-1">
-              <label className="text-xs text-white/40 uppercase tracking-wider">
-                Name <span className="text-red-400/70">*</span>
+              <label htmlFor="mood-name" className="text-xs text-white/40 uppercase tracking-wider">
+                Name <span className="text-red-400/70" aria-hidden="true">*</span>
               </label>
               <input
+                id="mood-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Cozy night in"
+                aria-required="true"
                 className="w-full px-3 py-2.5 bg-white/6 border border-white/10 rounded-xl text-white placeholder-white/25 focus:outline-none focus:border-white/25 text-sm"
               />
-              <label className="text-xs text-white/40 uppercase tracking-wider mt-2">
+              <label htmlFor="mood-description" className="text-xs text-white/40 uppercase tracking-wider mt-2">
                 Description
               </label>
               <input
+                id="mood-description"
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -157,7 +172,7 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
           {/* Genres */}
           <div>
             <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">
-              Genres <span className="text-red-400/70">*</span>
+              Genres <span className="text-red-400/70" aria-hidden="true">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {TMDB_GENRES.map((genre) => {
@@ -166,6 +181,7 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
                   <button
                     key={genre.id}
                     onClick={() => toggleGenre(genre.id)}
+                    aria-pressed={active}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 cursor-pointer ${
                       active
                         ? "border-white/30 bg-white/15 text-white"
@@ -198,6 +214,8 @@ export const CreateMoodModal = ({ onClose, onCreate }: CreateMoodModalProps) => 
                 <button
                   key={i}
                   onClick={() => setSelectedColor(i)}
+                  aria-label={`Color ${i + 1}`}
+                  aria-pressed={selectedColor === i}
                   className="w-8 h-8 rounded-full cursor-pointer transition-transform duration-200 hover:scale-110"
                   style={{
                     background: `linear-gradient(135deg, ${preset.color1}, ${preset.color2})`,

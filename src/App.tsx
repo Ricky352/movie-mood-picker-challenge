@@ -101,9 +101,10 @@ const MoodPage = () => {
       <div className="flex items-center gap-4 mb-6">
         <button
             onClick={handleBack}
+            aria-label="Back to moods"
             className="w-9 h-9 rounded-xl flex items-center justify-center text-lilac-ash-400 hover:text-lilac-ash-100 bg-lilac-ash-800/60 hover:bg-lilac-ash-700/60 border border-lilac-ash-700/50 transition-all duration-200 cursor-pointer"
         >
-          ←
+          <span aria-hidden="true">←</span>
         </button>
 
         <div>

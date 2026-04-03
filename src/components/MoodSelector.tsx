@@ -59,6 +59,8 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
     <div className="flex-1 flex flex-col justify-center content-center ">
       <div
         ref={containerRef}
+        role="group"
+        aria-label="Mood selector"
         className="relative w-full max-w-135 sm:max-w-160 lg:max-w-200 aspect-square mx-auto"
       >
         {/* Orbit ring */}
@@ -102,6 +104,7 @@ export const MoodSelector = ({ onSelect }: MoodSelectorProps) => {
         >
           <button
             onClick={() => onSelect(selected!)}
+            aria-label={activeMoodConfig ? `Show me ${activeMoodConfig.label.toLowerCase()} movies` : undefined}
             className="px-9 py-3.5 rounded-[14px] border-0 text-black text-md font-bold cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03]"
             style={{
               background: activeMoodConfig

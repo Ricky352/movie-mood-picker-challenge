@@ -61,10 +61,22 @@ export const MoodBubble = ({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={isSelected}
+      aria-label={`${config.label} mood`}
       onMouseEnter={() => onHover(config.id)}
       onMouseLeave={() => onHover(null)}
+      onFocus={() => onHover(config.id)}
+      onBlur={() => onHover(null)}
       onClick={() => onSelect(config.id)}
-      className={`absolute left-1/2 top-1/2 cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(config.id);
+        }
+      }}
+      className={`absolute left-1/2 top-1/2 rounded-full cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isSelected || isHovered ? "z-10" : "z-1"
       }`}
       style={{
@@ -114,10 +126,11 @@ export const MoodBubble = ({
               e.stopPropagation();
               onDelete();
             }}
+            aria-label={`Delete ${config.label} mood`}
             className="mt-1 text-white/40 hover:text-red-400 transition-colors duration-200 cursor-pointer"
             style={{ fontSize: `${containerSize * 0.014}px` }}
           >
-            ✕ Delete
+            <span aria-hidden="true">✕</span> Delete
           </button>
         )}
       </div>

@@ -28,9 +28,20 @@ export const SunCenter = ({
   return (
     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[15] flex flex-col items-center">
       <div
+        role="button"
+        tabIndex={0}
+        aria-label={activeMoodConfig ? `${activeMoodConfig.label} selected` : "Pick a random mood"}
         onClick={onRandomPick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onRandomPick();
+          }
+        }}
         onMouseEnter={() => onSunHover(true)}
         onMouseLeave={() => onSunHover(false)}
+        onFocus={() => onSunHover(true)}
+        onBlur={() => onSunHover(false)}
         className={`rounded-full cursor-pointer flex flex-col items-center justify-center transition-all duration-500 backdrop-blur-md ${sunHovered && !activeMoodConfig ? "scale-[1.08]" : ""}`}
         style={{
           width: `${orbSize}px`,
