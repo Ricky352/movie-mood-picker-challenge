@@ -75,6 +75,7 @@ body,
   overscroll-behavior-y: none;
 }
 
+
 body {
   margin: 0;
   font-family:
@@ -94,6 +95,8 @@ body {
   transition: --mood-accent 700ms ease;
 }
 
+
+/*debug*/
 * {
   /*border: 1px solid white;*/
 }

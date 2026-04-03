@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { Movie } from "../types/movie";
+import { useFavorites } from "../hooks/useFavorites";
 
 interface MovieModalProps {
   movie: Movie;
@@ -25,6 +26,9 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
       document.body.style.overflow = previousOverflow;
     };
   }, []);
+
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorited = isFavorite(movie.id);
 
   const hours = movie.runtime ? Math.floor(movie.runtime / 60) : null;
   const mins = movie.runtime ? movie.runtime % 60 : null;
@@ -57,13 +61,21 @@ export const MovieModal = ({ movie, onClose }: MovieModalProps) => {
           <div className="h-6" />
         )}
 
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white/60 hover:text-white transition-colors cursor-pointer"
-        >
-          ✕
-        </button>
+        {/* Actions */}
+        <div className="absolute top-3 right-3 flex gap-2">
+          <button
+            onClick={() => toggleFavorite(movie)}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer ${favorited ? "bg-black/60 text-red-400" : "bg-black/40 text-white/60 hover:text-red-400"}`}
+          >
+            {favorited ? "♥" : "♡"}
+          </button>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white/60 hover:text-white transition-colors cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
 
         {/* Content */}
         <div className="flex gap-5 px-6 pb-2 mt-2">

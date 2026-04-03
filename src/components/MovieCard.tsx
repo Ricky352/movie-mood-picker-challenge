@@ -1,4 +1,5 @@
 import type { Movie } from "../types/movie";
+import { useFavorites } from "../hooks/useFavorites";
 
 interface MovieCardProps {
   movie: Movie;
@@ -6,10 +7,13 @@ interface MovieCardProps {
 }
 
 export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorited = isFavorite(movie.id);
+
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer border border-lilac-ash-700 rounded-lg overflow-hidden bg-lilac-ash-800/50 transition-all duration-300 hover:-translate-y-1 hover:border-lilac-ash-500 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+      className="cursor-pointer border border-lilac-ash-700 rounded-lg overflow-hidden bg-lilac-ash-800/50 transition-all duration-300 hover:-translate-y-1 hover:border-lilac-ash-500 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] group relative"
     >
       {movie.posterUrl ? (
         <img
@@ -22,6 +26,15 @@ export const MovieCard = ({ movie, onClick }: MovieCardProps) => {
           <span className="text-lilac-ash-400">No poster</span>
         </div>
       )}
+
+      {/* Favorite button */}
+      <button
+        onClick={(e) => { e.stopPropagation(); toggleFavorite(movie); }}
+        className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer opacity-0 group-hover:opacity-100 ${favorited ? "opacity-100 bg-black/60 text-red-400" : "bg-black/40 text-white/70 hover:text-red-400"}`}
+      >
+        {favorited ? "♥" : "♡"}
+      </button>
+
       <div className="p-4">
         <h3 className="font-semibold text-lg text-lilac-ash-50 leading-tight">
           {movie.title}

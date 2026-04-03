@@ -7,6 +7,8 @@ import { MoodSelector } from "./components/MoodSelector";
 import { MovieGrid } from "./components/MovieGrid";
 import { LoadingState } from "./components/LoadingState";
 import { ErrorState } from "./components/ErrorState";
+import { FavoritesPage } from "./components/FavoritesPage";
+import { FavoritesProvider } from "./context/FavoritesContext";
 import { hexToRgba } from "./utils/colours";
 import type { Mood } from "./types/mood";
 
@@ -168,14 +170,17 @@ const HomePage = () => {
 
 const App = () => {
   return (
-    <div className="flex flex-col min-h-screen max-w-6xl mx-auto px-4">
-      <Header />
+    <FavoritesProvider>
+      <div className="flex flex-col min-h-screen max-w-6xl mx-auto px-4">
+        <Header />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/:mood" element={<MoodPage />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/:mood" element={<MoodPage />} />
+        </Routes>
+      </div>
+    </FavoritesProvider>
   );
 };
 
